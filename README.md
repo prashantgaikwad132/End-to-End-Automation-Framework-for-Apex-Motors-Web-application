@@ -13,7 +13,6 @@ apex-motors-automation/
 ├── requirements.txt             # Python dependencies
 ├── .env                         # Environment config (BASE_URL, viewport, timeout)
 ├── Jenkinsfile                  # Declarative CI/CD pipeline
-├── .github/workflows/ci.yml    # GitHub Actions alternative pipeline
 │
 ├── pages/                       # Page Object Model (POM)
 │   ├── base_page.py             #   └─ Abstract base with reusable helpers
