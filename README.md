@@ -188,5 +188,5 @@ Create `tests/test_feature.py`, register markers in `pytest.ini`.
 
 ---
 
-**Author:** Senior SDET | Python · Playwright · Pytest · Allure  
+**Author:** Prashant Gaikwad | Senior Automation Engineer | Python · Playwright · Pytest · Jenkins · Allure  
 **Target App:** [Apex Motors](https://driveway-dashboard-buddy.lovable.app)
