@@ -1,0 +1,133 @@
+{
+  "vehicles": [
+    {
+      "name": "Veloce GT-R",
+      "brand": "Veloce",
+      "category": "Sports",
+      "year": 2026,
+      "price": 185000,
+      "horsepower": 620,
+      "acceleration": "2.9s 0-60",
+      "transmission": "7-Speed DCT",
+      "fuel_type": "Premium Gasoline",
+      "engine": "4.0L Twin-Turbo V8",
+      "drivetrain": "RWD",
+      "top_speed": "205 mph"
+    },
+    {
+      "name": "Atlas Prestige",
+      "brand": "Atlas",
+      "category": "SUV",
+      "year": 2026,
+      "price": 92000,
+      "horsepower": 380,
+      "acceleration": "4.8s 0-60",
+      "transmission": "8-Speed Automatic",
+      "fuel_type": "Premium Gasoline",
+      "engine": "3.0L Turbo V6",
+      "drivetrain": "AWD",
+      "top_speed": "155 mph"
+    },
+    {
+      "name": "Volt EV-S",
+      "brand": "Volt",
+      "category": "Sedan",
+      "year": 2026,
+      "price": 78000,
+      "horsepower": 450,
+      "acceleration": "3.2s 0-60",
+      "transmission": "Single-Speed Direct",
+      "fuel_type": "Electric",
+      "engine": "Dual Electric Motors",
+      "drivetrain": "AWD",
+      "top_speed": "162 mph"
+    },
+    {
+      "name": "Nocturne GTS",
+      "brand": "Nocturne",
+      "category": "Coupe",
+      "year": 2026,
+      "price": 145000,
+      "horsepower": 523,
+      "acceleration": "3.4s 0-60",
+      "transmission": "8-Speed Automatic",
+      "fuel_type": "Premium Gasoline",
+      "engine": "4.4L Twin-Turbo V8",
+      "drivetrain": "AWD",
+      "top_speed": "190 mph"
+    },
+    {
+      "name": "Viper Evo",
+      "brand": "Viper",
+      "category": "Sports",
+      "year": 2026,
+      "price": 275000,
+      "horsepower": 740,
+      "acceleration": "2.6s 0-60",
+      "transmission": "7-Speed DCT",
+      "fuel_type": "Premium Gasoline",
+      "engine": "5.2L Naturally Aspirated V10",
+      "drivetrain": "AWD",
+      "top_speed": "218 mph"
+    },
+    {
+      "name": "Eclipse Spyder",
+      "brand": "Eclipse",
+      "category": "Convertible",
+      "year": 2026,
+      "price": 198000,
+      "horsepower": 580,
+      "acceleration": "3.1s 0-60",
+      "transmission": "7-Speed DCT",
+      "fuel_type": "Premium Gasoline",
+      "engine": "4.0L Twin-Turbo V8",
+      "drivetrain": "RWD",
+      "top_speed": "195 mph"
+    }
+  ],
+  "categories": ["All", "Sports", "SUV", "Sedan", "Coupe", "Convertible"],
+  "category_counts": {
+    "All": 6,
+    "Sports": 2,
+    "SUV": 1,
+    "Sedan": 1,
+    "Coupe": 1,
+    "Convertible": 1
+  },
+  "contact_form_valid": [
+    {
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "john.doe@example.com",
+      "interest": "Schedule Test Drive",
+      "message": "I'd like to test drive the Veloce GT-R this weekend."
+    },
+    {
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "email": "jane@company.org",
+      "interest": "General Inquiry",
+      "message": "Do you offer certified pre-owned vehicles?"
+    }
+  ],
+  "contact_form_invalid": [
+    {
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "interest": "General Inquiry",
+      "message": ""
+    }
+  ],
+  "search_queries": [
+    { "query": "Veloce", "expected_count": 1, "expected_name": "Veloce GT-R" },
+    { "query": "Atlas", "expected_count": 1, "expected_name": "Atlas Prestige" },
+    { "query": "NonExistentBrand", "expected_count": 0 },
+    { "query": "Viper", "expected_count": 1, "expected_name": "Viper Evo" }
+  ],
+  "responsive_viewports": [
+    { "name": "iPhone 13", "width": 390, "height": 844 },
+    { "name": "iPad", "width": 768, "height": 1024 },
+    { "name": "Desktop", "width": 1920, "height": 1080 }
+  ]
+}
