@@ -1,3 +1,4 @@
+# Pytest configuration added by Engineer One
 """
 Apex Motors E2E Automation Framework — Conftest (Pytest Fixtures & Hooks)
 """
