@@ -18,7 +18,7 @@ pipeline {
         stage('🔧 Setup Environment') {
             steps {
                 bat '''
-                C:\\Users\\prash\\AppData\\Local\\Python\\bin\\python.exe -m venv .venv
+                C:\\Users\\prash\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m venv .venv
                 call .venv\\Scripts\\activate.bat
                 python -m pip install --upgrade pip
                 python -m pip install -r requirements.txt
