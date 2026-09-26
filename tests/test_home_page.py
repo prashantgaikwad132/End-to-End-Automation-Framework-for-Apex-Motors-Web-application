@@ -10,6 +10,7 @@ from pages.header_nav import HeaderNav
 
 @allure.epic("Apex Motors")
 @allure.feature("Home Page")
+@pytest.mark.regression
 class TestHomePage:
 
     @pytest.fixture(autouse=True)

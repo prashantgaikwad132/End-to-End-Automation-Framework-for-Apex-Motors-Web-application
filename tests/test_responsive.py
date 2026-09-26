@@ -9,6 +9,7 @@ from playwright.sync_api import expect
 
 @allure.epic("Apex Motors")
 @allure.feature("Responsive Design")
+@pytest.mark.regression
 class TestResponsive:
 
     @allure.story("Mobile Navigation")

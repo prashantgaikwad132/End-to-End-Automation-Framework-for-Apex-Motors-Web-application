@@ -10,6 +10,7 @@ from pages.contact_page import ContactPage
 
 @allure.epic("Apex Motors")
 @allure.feature("Contact / Lead Generation")
+@pytest.mark.regression
 class TestContact:
 
     @pytest.fixture(autouse=True)

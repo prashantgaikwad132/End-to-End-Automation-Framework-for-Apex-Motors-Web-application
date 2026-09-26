@@ -10,6 +10,7 @@ from pages.vehicle_modal_page import VehicleModalPage
 
 @allure.epic("Apex Motors")
 @allure.feature("Inventory")
+@pytest.mark.regression
 class TestInventory:
 
     @pytest.fixture(autouse=True)
