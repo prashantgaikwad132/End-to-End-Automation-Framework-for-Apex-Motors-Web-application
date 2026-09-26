@@ -6,6 +6,7 @@ Wraps Playwright Page with reusable, logged interaction helpers.
 import allure
 from playwright.sync_api import Page, Locator, expect
 from utils.logger import get_logger
+import re
 
 logger = get_logger("BasePage")
 
@@ -74,7 +75,8 @@ class BasePage:
 
     @allure.step("Assert URL contains: {path}")
     def assert_url_contains(self, path: str):
-        expect(self.page).to_have_url(f".*{path}.*")
+        # Uses regex pattern matching so any URL containing the path passes
+        expect(self.page).to_have_url(re.compile(rf".*{re.escape(path)}.*"))
 
     # ── Screenshots ──────────────────────────────────────────────────────
 
