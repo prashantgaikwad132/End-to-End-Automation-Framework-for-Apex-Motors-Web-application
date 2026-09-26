@@ -24,7 +24,7 @@ def pytest_addoption(parser):
     parser.addoption("--browser-name", default="chromium", choices=["chromium", "firefox", "webkit"])
     parser.addoption("--headed", action="store_true", default=False)
     parser.addoption("--device", default=None, help="Playwright device descriptor e.g. 'iPhone 13'")
-    parser.addoption("--base-url", default=None, help="Override base URL from .env")
+    #parser.addoption("--base-url", default=None, help="Override base URL from .env")
     parser.addoption("--slow-mo", default=0, type=int, help="Slow‑motion delay in ms")
 
 
