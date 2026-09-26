@@ -35,7 +35,7 @@ pipeline {
                     
                     bat """
                         call .venv\\Scripts\\activate.bat
-                        python -m pytest tests/ --browser-name=${params.BROWSER} --base-url=${params.BASE_URL} ${headedFlag} ${markerFlag} --tb=short -v || exit /b 0
+                        python -m pytest tests/ --browser=${params.BROWSER} --base-url=${params.BASE_URL} ${headedFlag} ${markerFlag} --tb=short -v || exit /b 0
                     """
                 }
             }
@@ -49,7 +49,7 @@ pipeline {
                         jdk: '',
                         properties: [],
                         reportBuildPolicy: 'ALWAYS',
-                        results: [[path: 'allure-results']]
+                        results: [[path: 'reports/allure-results']]
                     ])
                 }
             }
