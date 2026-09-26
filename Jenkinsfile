@@ -15,14 +15,15 @@ pipeline {
 
     stages {
 
-        stage('🔧 Setup Environment') {
+        stage('Environment Setup') {
             steps {
                 bat '''
-                    python -m venv .venv
-                    call .venv\\Scripts\\activate.bat
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
-                    playwright install --with-deps %BROWSER%
+                python -m venv .venv
+                call .venv\\Scripts\\activate.bat
+                python -m pip install --upgrade pip
+                pip install greenlet --only-binary=greenlet
+                pip install -r requirements.txt
+                playwright install chromium --with-deps
                 '''
             }
         }
