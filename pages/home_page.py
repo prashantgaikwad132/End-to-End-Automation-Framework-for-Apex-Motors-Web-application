@@ -61,10 +61,10 @@ class HomePage(BasePage):
 
     @allure.step("Verify stats section")
     def verify_stats_section(self):
-    # Scroll if necessary or use the exact header/stat visible on the DOM
-    stat_element = self.page.get_by_text("Years of Excellence", exact=False).first
-    stat_element.scroll_into_view_if_needed()
-    expect(stat_element).to_be_visible()
+        # Scroll if necessary or use the exact header/stat visible on the DOM
+        stat_element = self.page.get_by_text("Years of Excellence", exact=False).first
+        stat_element.scroll_into_view_if_needed()
+        expect(stat_element).to_be_visible()
 
     @allure.step("Get all visible vehicle names")
     def get_vehicle_names(self) -> list[str]:
