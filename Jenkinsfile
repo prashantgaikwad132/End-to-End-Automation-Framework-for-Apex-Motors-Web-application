@@ -15,14 +15,14 @@ pipeline {
 
     stages {
 
-        stage('Environment Setup') {
+        stage('🔧 Setup Environment') {
             steps {
                 bat '''
                 python -m venv .venv
                 call .venv\\Scripts\\activate.bat
                 python -m pip install --upgrade pip
-                pip install -r requirements.txt
-                playwright install chromium --with-deps
+                python -m pip install -r requirements.txt
+                python -m playwright install chromium --with-deps
                 '''
             }
         }
@@ -32,16 +32,10 @@ pipeline {
                 script {
                     def markerFlag = params.MARKERS ? "-m \"${params.MARKERS}\"" : ""
                     def headedFlag = params.HEADED ? "--headed" : ""
-                    sh """
-                        . .venv/bin/activate
-                        pytest tests/ \
-                            --browser-name=${params.BROWSER} \
-                            --base-url=${params.BASE_URL} \
-                            ${headedFlag} \
-                            ${markerFlag} \
-                            --tb=short \
-                            -v \
-                            || true
+                    
+                    bat """
+                        call .venv\\Scripts\\activate.bat
+                        python -m pytest tests/ --browser-name=${params.BROWSER} --base-url=${params.BASE_URL} ${headedFlag} ${markerFlag} --tb=short -v || exit /b 0
                     """
                 }
             }
