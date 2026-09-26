@@ -6,7 +6,7 @@ import allure
 from playwright.sync_api import Page, expect
 from pages.base_page import BasePage
 
-
+@pytest.mark.regression  # <--- Now all tests inside this class run in regression
 class HeaderNav(BasePage):
     LOGO = "text=APEX"
     NAV_HOME = "nav >> a:has-text('Home')"

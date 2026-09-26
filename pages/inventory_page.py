@@ -6,7 +6,7 @@ import allure
 from playwright.sync_api import Page, expect
 from pages.base_page import BasePage
 
-
+@pytest.mark.regression  # <--- Now all tests inside this class run in regression
 class InventoryPage(BasePage):
     HEADING = "h1:has-text('Our Collection')"
     SEARCH_INPUT = "input[placeholder='Search vehicles...']"

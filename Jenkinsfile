@@ -17,12 +17,12 @@ pipeline {
 
         stage('🔧 Setup Environment') {
             steps {
-                sh '''
-                    python3 -m venv .venv
-                    . .venv/bin/activate
+                bat '''
+                    python -m venv .venv
+                    call .venv\\Scripts\\activate.bat
                     pip install --upgrade pip
                     pip install -r requirements.txt
-                    playwright install --with-deps ${BROWSER}
+                    playwright install --with-deps %BROWSER%
                 '''
             }
         }
@@ -39,7 +39,6 @@ pipeline {
                             --base-url=${params.BASE_URL} \
                             ${headedFlag} \
                             ${markerFlag} \
-                            --alluredir=${ALLURE_RESULTS} \
                             --tb=short \
                             -v \
                             || true
