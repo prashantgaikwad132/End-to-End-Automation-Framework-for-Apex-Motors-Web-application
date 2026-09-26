@@ -35,7 +35,7 @@ pipeline {
                     
                     bat """
                         call .venv\\Scripts\\activate.bat
-                        python -m pytest tests/ --browser=${params.BROWSER} --base-url=${params.BASE_URL} ${headedFlag} ${markerFlag} --tb=short -v || exit /b 0
+                        python -m pytest tests/ -n 2 --browser=${params.BROWSER} --base-url=${params.BASE_URL} ${headedFlag} ${markerFlag} --tb=short -v || exit /b 0
                     """
                 }
             }
