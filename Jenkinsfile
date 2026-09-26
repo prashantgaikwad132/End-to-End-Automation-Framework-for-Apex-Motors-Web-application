@@ -35,7 +35,7 @@ pipeline {
                     
                     bat """
                         call .venv\\Scripts\\activate.bat
-                        python -m pytest tests/ -n 2 --browser=${params.BROWSER} --base-url=${params.BASE_URL} ${headedFlag} ${markerFlag} --tb=short -v || exit /b 0
+                        python -m pytest tests/ -n 2 --browser=${params.BROWSER} --base-url=${params.BASE_URL} ${headedFlag} ${markerFlag} --tracing=retain-on-failure --tb=short -v || exit /b 0
                     """
                 }
             }
@@ -58,7 +58,8 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'reports/**', allowEmptyArchive: true
+            // Archives the Playwright traces along with the reports BEFORE workspace cleanup
+            archiveArtifacts artifacts: 'test-results/**/*.zip, reports/**', allowEmptyArchive: true
             cleanWs()
         }
         failure {
