@@ -31,7 +31,8 @@ class TestResponsive:
         page.wait_for_timeout(500)
 
         # Navigate via mobile menu
-        page.get_by_text("Inventory").click()
+        #page.get_by_text("Inventory").click()
+        page.locator("nav.mobile-menu").get_by_role("link", name="Inventory").click()
         page.wait_for_url("**/inventory")
         assert "/inventory" in page.url
 

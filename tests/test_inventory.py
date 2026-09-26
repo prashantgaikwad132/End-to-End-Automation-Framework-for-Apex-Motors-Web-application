@@ -46,8 +46,8 @@ class TestInventory:
     ])
     def test_category_filtering(self, category, expected):
         """TC-012: Each category filter shows correct vehicle count."""
-        self.inventory.filter_category(category)
-        assert self.inventory.get_card_count() == expected
+        self.inventory.filter_by_category(category)
+        self.inventory.assert_card_count(expected)
 
     @allure.story("Vehicle Modal")
     @pytest.mark.inventory

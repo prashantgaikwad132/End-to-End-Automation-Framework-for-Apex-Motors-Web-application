@@ -36,9 +36,14 @@ class InventoryPage(BasePage):
         return self
 
     @allure.step("Filter category: {category}")
-    def filter_category(self, category: str):
+    def filter_by_category(self, category: str):
         self.page.get_by_role("button", name=category, exact=True).click()
-        self.page.wait_for_timeout(500)
+        return self
+
+    @allure.step("Verify filtered vehicle card count is {expected}")
+    def assert_card_count(self, expected: int):
+        """Auto-retries polling the DOM until the count matches expected."""
+        expect(self.page.locator(self.VEHICLE_CARDS)).to_have_count(expected)
         return self
 
     @allure.step("Get visible card count")

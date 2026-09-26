@@ -56,8 +56,8 @@ class TestHomePage:
     def test_filter_suv_category(self, test_data):
         """TC-005: SUV filter shows only SUV vehicles."""
         self.home.filter_by_category("SUV")
-        count = self.home.get_vehicle_card_count()
-        assert count == test_data["category_counts"]["SUV"]
+        expected = test_data["category_counts"]["SUV"]
+        expect(self.home.page.locator(self.home.VEHICLE_CARDS)).to_have_count(expected)
 
     @allure.story("Featured Vehicles")
     @pytest.mark.inventory
