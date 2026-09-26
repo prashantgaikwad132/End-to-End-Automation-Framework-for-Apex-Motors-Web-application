@@ -6,7 +6,6 @@ import allure
 from playwright.sync_api import Page, expect
 from pages.base_page import BasePage
 
-@pytest.mark.regression  # <--- Now all tests inside this class run in regression
 class VehicleModalPage(BasePage):
     MODAL_CONTAINER = ".fixed.inset-0.z-50"
     CLOSE_BTN = "button[aria-label='Close']"

@@ -6,8 +6,6 @@ import allure
 from playwright.sync_api import Page, expect
 from pages.base_page import BasePage
 
-@pytest.mark.regression  # <--- Now all tests inside this class run in regression
-
 class AboutPage(BasePage):
     HEADING = "h1:has-text('About Apex Motors')"
     OUR_STORY_LABEL = "text=OUR STORY"

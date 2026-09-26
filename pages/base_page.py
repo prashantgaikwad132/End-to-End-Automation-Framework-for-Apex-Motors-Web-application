@@ -9,7 +9,6 @@ from utils.logger import get_logger
 
 logger = get_logger("BasePage")
 
-@pytest.mark.regression  # <--- Now all tests inside this class run in regression
 class BasePage:
     def __init__(self, page: Page, base_url: str = ""):
         self.page = page
