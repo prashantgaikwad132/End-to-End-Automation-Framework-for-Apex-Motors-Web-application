@@ -21,11 +21,9 @@ logger = get_logger(__name__)
 # ── CLI Options ──────────────────────────────────────────────────────────────
 
 def pytest_addoption(parser):
-    parser.addoption("--browser-name", default="chromium", choices=["chromium", "firefox", "webkit"])
-    #parser.addoption("--headed", action="store_true", default=False)
-    parser.addoption("--device", default=None, help="Playwright device descriptor e.g. 'iPhone 13'")
-    #parser.addoption("--base-url", default=None, help="Override base URL from .env")
-    parser.addoption("--slow-mo", default=0, type=int, help="Slow‑motion delay in ms")
+    # Built-in options like --browser, --headed, --device are natively handled by pytest-playwright
+    # and --base-url is natively handled by pytest-base-url.
+    pass
 
 
 # ── Session-scoped fixtures ──────────────────────────────────────────────────
@@ -33,8 +31,9 @@ def pytest_addoption(parser):
 @pytest.fixture(scope="session")
 def config(request):
     cfg = Config()
-    if request.config.getoption("--base-url"):
-        cfg.BASE_URL = request.config.getoption("--base-url")
+    base_url_opt = request.config.getoption("--base-url", default=None)
+    if base_url_opt:
+        cfg.BASE_URL = base_url_opt
     return cfg
 
 
@@ -46,9 +45,13 @@ def playwright_instance():
 
 @pytest.fixture(scope="session")
 def browser(playwright_instance, request, config) -> Browser:
-    browser_name = request.config.getoption("--browser-name")
-    headed = request.config.getoption("--headed")
-    slow_mo = request.config.getoption("--slow-mo")
+    # Use standard pytest-playwright option '--browser'
+    browser_opt = request.config.getoption("--browser", default="chromium")
+    browser_name = browser_opt[0] if isinstance(browser_opt, list) else browser_opt
+    
+    headed = request.config.getoption("--headed", default=False)
+    slow_mo = request.config.getoption("--slowmo", default=0)
+    
     launcher = getattr(playwright_instance, browser_name)
     browser = launcher.launch(headless=not headed, slow_mo=slow_mo)
     logger.info(f"Launched {browser_name} (headed={headed}, slow_mo={slow_mo})")
@@ -60,7 +63,7 @@ def browser(playwright_instance, request, config) -> Browser:
 
 @pytest.fixture
 def context(browser, request, config) -> BrowserContext:
-    device_name = request.config.getoption("--device")
+    device_name = request.config.getoption("--device", default=None)
     ctx_args = {
         "viewport": {"width": config.VIEWPORT_WIDTH, "height": config.VIEWPORT_HEIGHT},
         "base_url": config.BASE_URL,
