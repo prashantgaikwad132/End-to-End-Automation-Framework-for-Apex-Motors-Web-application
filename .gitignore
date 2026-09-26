@@ -7,3 +7,4 @@ reports/
 dist/
 build/
 .allure/
+.env
