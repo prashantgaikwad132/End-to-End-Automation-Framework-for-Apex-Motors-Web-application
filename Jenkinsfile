@@ -21,7 +21,6 @@ pipeline {
                 python -m venv .venv
                 call .venv\\Scripts\\activate.bat
                 python -m pip install --upgrade pip
-                pip install greenlet --only-binary=greenlet
                 pip install -r requirements.txt
                 playwright install chromium --with-deps
                 '''
