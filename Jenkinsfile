@@ -1,12 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            // Pre-configured official image containing Python and browser binaries
-            image 'mcr.microsoft.com/playwright/python:v1.49.1-noble'
-            // --ipc=host provides shared memory so headless browsers do not crash
-            args '--ipc=host -u root:root'
-        }
-    }
+    agent any
 
     parameters {
         choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit'], description: 'Target browser engine')
@@ -17,27 +10,24 @@ pipeline {
     environment {
         PYTHONDONTWRITEBYTECODE = '1'
         ALLURE_RESULTS = 'reports/allure-results'
-        HOME = '/tmp'
     }
 
     stages {
-        stage('🔧 Install Dependencies') {
-            steps {
-                // Runs inside the Linux Docker container
-                sh '''
-                    python3 -m pip install --upgrade pip
-                    pip install -r requirements.txt
-                '''
+        stage('🧪 Execute Playwright Tests in Docker') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright/python:v1.49.1-noble'
+                    args '--ipc=host -u root:root'
+                    reuseNode true
+                }
             }
-        }
-
-        stage('🧪 Execute Tests') {
             steps {
                 script {
                     def markerFlag = params.MARKERS ? "-m \"${params.MARKERS}\"" : ""
-                    
-                    // Runs Pytest inside the container; || true ensures report generation runs even on test failures
+
                     sh """
+                        python3 -m pip install --upgrade pip
+                        pip install -r requirements.txt
                         pytest tests/ -n 4 \
                             --browser=${params.BROWSER} \
                             --base-url=${params.BASE_URL} \
