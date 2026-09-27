@@ -23,7 +23,7 @@ pipeline {
                             -v "%WORKSPACE%":/workspace ^
                             -w /workspace ^
                             ${IMAGE_NAME} ^
-                            /bin/bash -c "pip install --no-cache-dir -r requirements.txt pytest-xdist && pytest tests/ --browser ${params.BROWSER} -n ${params.WORKERS} ${markerFlag} --alluredir=${ALLURE_RESULTS} -v || true"
+                            /bin/bash -c "pip install --no-cache-dir -r requirements.txt pytest-xdist && pytest tests/ --browser ${params.BROWSER} -n ${params.WORKERS} ${markerFlag} --alluredir=${ALLURE_RESULTS} --clean-alluredir -v || true"
                     """
                 }
             }
