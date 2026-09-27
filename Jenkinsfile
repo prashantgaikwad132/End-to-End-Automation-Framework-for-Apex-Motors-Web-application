@@ -18,13 +18,12 @@ pipeline {
                 script {
                     def markerFlag = params.MARKERS ? "-m ${params.MARKERS}" : ""
 
-                    // Map current Windows workspace directory to Linux container path /workspace
                     bat """
                         docker run --rm ^
                             -v "%WORKSPACE%":/workspace ^
                             -w /workspace ^
                             ${IMAGE_NAME} ^
-                            /bin/bash -c "pip install --no-cache-dir -r requirements.txt pytest-xdist && pytest tests/ --browser-name=${params.BROWSER} -n ${params.WORKERS} ${markerFlag} --alluredir=${ALLURE_RESULTS} -v || true"
+                            /bin/bash -c "pip install --no-cache-dir -r requirements.txt pytest-xdist && pytest tests/ --browser ${params.BROWSER} -n ${params.WORKERS} ${markerFlag} --alluredir=${ALLURE_RESULTS} -v || true"
                     """
                 }
             }
