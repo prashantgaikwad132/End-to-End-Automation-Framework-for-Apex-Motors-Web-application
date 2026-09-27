@@ -3,38 +3,28 @@ pipeline {
 
     parameters {
         choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit'], description: 'Target browser engine')
-        string(name: 'BASE_URL', defaultValue: 'https://driveway-dashboard-buddy.lovable.app', description: 'Application under test URL')
-        string(name: 'MARKERS', defaultValue: '', description: 'Pytest markers to run (e.g. smoke, regression)')
+        choice(name: 'MARKERS', choices: ['', 'smoke', 'regression', 'inventory', 'contact', 'navigation', 'responsive'], description: 'Pytest markers to execute')
+        choice(name: 'WORKERS', choices: ['2', '1', '4'], description: 'Parallel execution workers')
     }
 
     environment {
-        PYTHONDONTWRITEBYTECODE = '1'
         ALLURE_RESULTS = 'reports/allure-results'
+        IMAGE_NAME     = 'mcr.microsoft.com/playwright/python:v1.49.1-noble'
     }
 
     stages {
         stage('🧪 Execute Playwright Tests in Docker') {
-            agent {
-                docker {
-                    image 'mcr.microsoft.com/playwright/python:v1.49.1-noble'
-                    args '--ipc=host -u root:root'
-                    reuseNode true
-                }
-            }
             steps {
                 script {
-                    def markerFlag = params.MARKERS ? "-m \"${params.MARKERS}\"" : ""
+                    def markerFlag = params.MARKERS ? "-m ${params.MARKERS}" : ""
 
-                    sh """
-                        python3 -m pip install --upgrade pip
-                        pip install -r requirements.txt
-                        pytest tests/ -n 4 \
-                            --browser=${params.BROWSER} \
-                            --base-url=${params.BASE_URL} \
-                            ${markerFlag} \
-                            --alluredir=reports/allure-results \
-                            --tracing=retain-on-failure \
-                            --tb=short -v || true
+                    // Map current Windows workspace directory to Linux container path /workspace
+                    bat """
+                        docker run --rm ^
+                            -v "%WORKSPACE%":/workspace ^
+                            -w /workspace ^
+                            ${IMAGE_NAME} ^
+                            /bin/bash -c "pip install --no-cache-dir -r requirements.txt pytest-xdist && pytest tests/ --browser-name=${params.BROWSER} -n ${params.WORKERS} ${markerFlag} --alluredir=${ALLURE_RESULTS} -v || true"
                     """
                 }
             }
@@ -47,7 +37,7 @@ pipeline {
                     jdk: '',
                     properties: [],
                     reportBuildPolicy: 'ALWAYS',
-                    results: [[path: 'reports/allure-results']]
+                    results: [[path: "${ALLURE_RESULTS}"]]
                 ])
             }
         }
@@ -55,14 +45,13 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'test-results/**/*.zip, reports/**', allowEmptyArchive: true
-            cleanWs()
+            archiveArtifacts artifacts: 'reports/**', allowEmptyArchive: true
         }
         failure {
-            echo '❌ Pipeline failed — check Allure report for details.'
+            echo '❌ Pipeline execution failed — review logs or Allure report.'
         }
         success {
-            echo '✅ All stages completed successfully.'
+            echo '✅ Pipeline execution completed successfully.'
         }
     }
 }
