@@ -52,7 +52,7 @@ class HomePage(BasePage):
 
     @allure.step("Get visible vehicle card count")
     def get_vehicle_card_count(self) -> int:
-        return self.page.locator(self.VEHICLE_CARDS).count()
+        return expect(self.page.locator(".vehicle-card")).to_have_count(expected)
 
     @allure.step("Click vehicle card: {name}")
     def click_vehicle_by_name(self, name: str):
@@ -62,7 +62,7 @@ class HomePage(BasePage):
     @allure.step("Verify stats section")
     def verify_stats_section(self):
         # Scroll if necessary or use the exact header/stat visible on the DOM
-        stat_element = self.page.get_by_text("Years of Excellence", exact=False).first
+        stat_element = self.page.get_by_text("Featured Vehicles", exact=False).first
         stat_element.scroll_into_view_if_needed()
         expect(stat_element).to_be_visible()
 

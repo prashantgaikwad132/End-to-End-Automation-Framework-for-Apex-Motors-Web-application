@@ -4,6 +4,7 @@ test_home_page.py — Home page smoke & functional tests
 
 import pytest
 import allure
+from playwright.sync_api import Page, expect
 from pages.home_page import HomePage
 from pages.header_nav import HeaderNav
 

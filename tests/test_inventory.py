@@ -98,7 +98,7 @@ class TestInventory:
     @pytest.mark.regression
     def test_search_combined_with_category(self):
         """TC-018: Search + category filter work together."""
-        self.inventory.filter_category("Sports")
+        self.inventory.filter_by_category("Sports")
         self.inventory.search("Viper")
         assert self.inventory.get_card_count() == 1
         titles = self.inventory.get_card_titles()
