@@ -19,11 +19,16 @@ pipeline {
                     def markerFlag = params.MARKERS ? "-m ${params.MARKERS}" : ""
 
                     bat """
+                        @echo off
+                        if exist "reports\\allure-results" rmdir /s /q "reports\\allure-results"
+                        if not exist "reports" mkdir "reports"
+                        mkdir "reports\\allure-results"
+
                         docker run --rm ^
                             -v "%WORKSPACE%":/workspace ^
                             -w /workspace ^
                             ${IMAGE_NAME} ^
-                            /bin/bash -c "pip install --no-cache-dir -r requirements.txt pytest-xdist && pytest tests/ --browser ${params.BROWSER} -n ${params.WORKERS} ${markerFlag} --alluredir=${ALLURE_RESULTS} --clean-alluredir -v || true"
+                            /bin/bash -c "pip install --no-cache-dir -r requirements.txt pytest-xdist && pytest tests/ --browser ${params.BROWSER} -n ${params.WORKERS} ${markerFlag} --alluredir=${ALLURE_RESULTS} -v || true"
                     """
                 }
             }
