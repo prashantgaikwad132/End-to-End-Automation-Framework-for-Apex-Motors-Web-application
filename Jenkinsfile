@@ -1,9 +1,15 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            // Pre-configured official image containing Python and browser binaries
+            image 'mcr.microsoft.com/playwright/python:v1.49.1-noble'
+            // --ipc=host provides shared memory so headless browsers do not crash
+            args '--ipc=host -u root:root'
+        }
+    }
 
     parameters {
         choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit'], description: 'Target browser engine')
-        booleanParam(name: 'HEADED', defaultValue: false, description: 'Run in headed mode')
         string(name: 'BASE_URL', defaultValue: 'https://driveway-dashboard-buddy.lovable.app', description: 'Application under test URL')
         string(name: 'MARKERS', defaultValue: '', description: 'Pytest markers to run (e.g. smoke, regression)')
     }
@@ -11,18 +17,16 @@ pipeline {
     environment {
         PYTHONDONTWRITEBYTECODE = '1'
         ALLURE_RESULTS = 'reports/allure-results'
+        HOME = '/tmp'
     }
 
     stages {
-
-        stage('🔧 Setup Environment') {
+        stage('🔧 Install Dependencies') {
             steps {
-                bat '''
-                C:\\Users\\prash\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m venv .venv
-                call .venv\\Scripts\\activate.bat
-                python -m pip install --upgrade pip
-                python -m pip install -r requirements.txt
-                python -m playwright install chromium --with-deps
+                // Runs inside the Linux Docker container
+                sh '''
+                    python3 -m pip install --upgrade pip
+                    pip install -r requirements.txt
                 '''
             }
         }
@@ -31,11 +35,16 @@ pipeline {
             steps {
                 script {
                     def markerFlag = params.MARKERS ? "-m \"${params.MARKERS}\"" : ""
-                    def headedFlag = params.HEADED ? "--headed" : ""
                     
-                    bat """
-                        call .venv\\Scripts\\activate.bat
-                        python -m pytest tests/ -n 4 --browser=${params.BROWSER} --base-url=${params.BASE_URL} ${headedFlag} ${markerFlag} --tracing=retain-on-failure --tb=short -v || exit /b 0
+                    // Runs Pytest inside the container; || true ensures report generation runs even on test failures
+                    sh """
+                        pytest tests/ -n 4 \
+                            --browser=${params.BROWSER} \
+                            --base-url=${params.BASE_URL} \
+                            ${markerFlag} \
+                            --alluredir=reports/allure-results \
+                            --tracing=retain-on-failure \
+                            --tb=short -v || true
                     """
                 }
             }
@@ -43,22 +52,19 @@ pipeline {
 
         stage('📊 Generate Allure Report') {
             steps {
-                script {
-                    allure([
-                        includeProperties: false,
-                        jdk: '',
-                        properties: [],
-                        reportBuildPolicy: 'ALWAYS',
-                        results: [[path: 'reports/allure-results']]
-                    ])
-                }
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    properties: [],
+                    reportBuildPolicy: 'ALWAYS',
+                    results: [[path: 'reports/allure-results']]
+                ])
             }
         }
     }
 
     post {
         always {
-            // Archives the Playwright traces along with the reports BEFORE workspace cleanup
             archiveArtifacts artifacts: 'test-results/**/*.zip, reports/**', allowEmptyArchive: true
             cleanWs()
         }
