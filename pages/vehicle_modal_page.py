@@ -32,7 +32,7 @@ class VehicleModalPage(BasePage):
     @allure.step("Close modal")
     def close(self):
         self.page.locator(self.CLOSE_BTN).click()
-        self.page.wait_for_timeout(400)
+        expect(self.page.locator(self.MODAL_CONTAINER)).to_be_hidden()
         return self
 
     @allure.step("Get vehicle name from modal")
@@ -62,7 +62,10 @@ class VehicleModalPage(BasePage):
 
     @allure.step("Click 'Book Test Drive'")
     def click_book_test_drive(self):
-        self.page.locator(f"{self.MODAL_CONTAINER} >> {self.BOOK_BTN}").click()
+        modal = self.page.locator(self.MODAL_CONTAINER)
+        modal.get_by_role("button", name="Book Test Drive").or_(
+            modal.get_by_role("link", name="Book Test Drive")
+        ).click()
         return self
 
     @allure.step("Verify all spec labels present")
