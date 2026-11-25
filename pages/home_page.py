@@ -52,7 +52,7 @@ class HomePage(BasePage):
 
     @allure.step("Get visible vehicle card count")
     def get_vehicle_card_count(self) -> int:
-        return expect(self.page.locator(".vehicle-card")).to_have_count(expected)
+        return self.page.locator(self.VEHICLE_CARDS).count()
 
     @allure.step("Click vehicle card: {name}")
     def click_vehicle_by_name(self, name: str):

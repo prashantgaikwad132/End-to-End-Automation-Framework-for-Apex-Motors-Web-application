@@ -54,8 +54,10 @@ def playwright_instance():
 
 @pytest.fixture(scope="session")
 def browser(playwright_instance, request, config) -> Browser:
-    browser_opt = request.config.getoption("--browser", default="chromium")
-    browser_name = browser_opt[0] if isinstance(browser_opt, list) else browser_opt
+    browser_opt = request.config.getoption("--browser")
+    browser_name = browser_opt[0] if browser_opt else "chromium"
+    #browser_opt = request.config.getoption("--browser", default="chromium")
+    #browser_name = browser_opt[0] if isinstance(browser_opt, list) else browser_opt
     
     headed = request.config.getoption("--headed", default=False)
     slow_mo = request.config.getoption("--slowmo", default=0)
