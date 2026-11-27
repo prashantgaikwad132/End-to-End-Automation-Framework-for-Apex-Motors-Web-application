@@ -6,6 +6,7 @@ import allure
 from playwright.sync_api import Page, expect
 from pages.base_page import BasePage
 
+
 class VehicleModalPage(BasePage):
     MODAL_CONTAINER = ".fixed.inset-0.z-50"
     CLOSE_BTN = "button[aria-label='Close']"
@@ -35,6 +36,12 @@ class VehicleModalPage(BasePage):
         expect(self.page.locator(self.MODAL_CONTAINER)).to_be_hidden()
         return self
 
+    @allure.step("Close modal")
+    def close(self):
+        self.page.locator(self.CLOSE_BTN).click()
+        expect(self.page.locator(self.MODAL_CONTAINER)).to_be_hidden()
+        return self
+
     @allure.step("Get vehicle name from modal")
     def get_name(self) -> str:
         return self.page.locator(f"{self.MODAL_CONTAINER} h2").inner_text()
@@ -57,7 +64,10 @@ class VehicleModalPage(BasePage):
 
     @allure.step("Click 'Inquire Now'")
     def click_inquire(self):
-        self.page.locator(f"{self.MODAL_CONTAINER} >> {self.INQUIRE_BTN}").click()
+        modal = self.page.locator(self.MODAL_CONTAINER)
+        modal.get_by_role("button", name="Inquire Now").or_(
+            modal.get_by_role("link", name="Inquire Now")
+        ).click()
         return self
 
     @allure.step("Click 'Book Test Drive'")
