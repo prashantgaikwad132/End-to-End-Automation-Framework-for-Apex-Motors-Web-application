@@ -66,8 +66,16 @@ class InventoryPage(BasePage):
 
     @allure.step("Click vehicle: {name}")
     def click_vehicle(self, name: str):
-        self.page.get_by_text(name, exact=True).first.click()
-        self.page.wait_for_timeout(300)
+        card = self.page.locator(self.VEHICLE_CARDS).filter(has_text=name).first
+        expect(card).to_be_visible()
+        card.scroll_into_view_if_needed()
+        card.click()
+        modal = self.page.locator(".fixed.inset-0.z-50")
+        if not modal.is_visible():
+            try:
+                modal.wait_for(state="visible", timeout=2000)
+            except Exception:
+                card.click()
         return self
 
     @allure.step("Assert no results shown")
