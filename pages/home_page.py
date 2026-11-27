@@ -46,10 +46,17 @@ class HomePage(BasePage):
 
     @allure.step("Filter by category: {category}")
     def filter_by_category(self, category: str):
+        self.page.wait_for_load_state("networkidle")
         btn = self.page.get_by_role("button", name=category, exact=True)
         expect(btn).to_be_visible()
         btn.scroll_into_view_if_needed()
+        initial_class = btn.get_attribute("class") or ""
         btn.click()
+        if category != "All":
+            try:
+                expect(btn).not_to_have_attribute("class", initial_class, timeout=1500)
+            except AssertionError:
+                btn.click()
         return self
 
     @allure.step("Get visible vehicle card count")
