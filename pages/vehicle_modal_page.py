@@ -26,12 +26,12 @@ class VehicleModalPage(BasePage):
         super().__init__(page, base_url)
 
     @allure.step("Verify modal is open")
-    def is_open(self) -> bool:
-        return self.page.locator(self.MODAL_CONTAINER).is_visible()
+    def verify_open(self):
+        expect(self.page.locator(self.MODAL_CONTAINER)).to_be_visible()
+        return self
 
-    @allure.step("Close modal")
-    def close(self):
-        self.page.locator(self.CLOSE_BTN).click()
+    @allure.step("Verify modal is closed")
+    def verify_closed(self):
         expect(self.page.locator(self.MODAL_CONTAINER)).to_be_hidden()
         return self
 

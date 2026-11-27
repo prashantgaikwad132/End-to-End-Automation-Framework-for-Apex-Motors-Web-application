@@ -54,7 +54,7 @@ class TestInventory:
         """TC-013: Clicking a vehicle opens modal with correct specs."""
         vehicle = test_data["vehicles"][0]  # Veloce GT-R
         self.inventory.click_vehicle(vehicle["name"])
-        assert self.modal.is_open()
+        self.modal.verify_open()
         assert self.modal.get_name() == vehicle["name"]
         self.modal.verify_spec_labels()
 
@@ -63,9 +63,9 @@ class TestInventory:
     def test_modal_close_button(self, test_data):
         """TC-014: Modal closes via close button."""
         self.inventory.click_vehicle(test_data["vehicles"][0]["name"])
-        assert self.modal.is_open()
+        self.modal.verify_open()
         self.modal.close()
-        assert not self.modal.is_open()
+        self.modal.verify_closed()
 
     @allure.story("Vehicle Modal")
     @pytest.mark.inventory
