@@ -20,24 +20,34 @@ class InventoryPage(BasePage):
     @allure.step("Open Inventory page")
     def open(self):
         self.navigate("/inventory")
-        self.page.wait_for_selector(self.HEADING)
+        expect(self.page.locator(self.HEADING)).to_be_visible()
+        # Forces setup() to wait until React finishes mounting all 6 initial cards
+        expect(self.page.locator(self.VEHICLE_CARDS)).to_have_count(6)
         return self
 
     @allure.step("Search for: {query}")
     def search(self, query: str):
-        self.page.locator(self.SEARCH_INPUT).fill(query)
-        self.page.wait_for_timeout(400)
+        search_box = self.page.locator(self.SEARCH_INPUT)
+        expect(search_box).to_be_visible()
+        search_box.click()
+        search_box.fill(query)
+        expect(search_box).to_have_value(query)
         return self
 
     @allure.step("Clear search")
     def clear_search(self):
-        self.page.locator(self.SEARCH_INPUT).fill("")
-        self.page.wait_for_timeout(400)
+        search_box = self.page.locator(self.SEARCH_INPUT)
+        search_box.fill("")
+        expect(search_box).to_have_value("")
+        expect(self.page.locator(self.VEHICLE_CARDS)).to_have_count(6)
         return self
 
     @allure.step("Filter category: {category}")
     def filter_by_category(self, category: str):
-        self.page.get_by_role("button", name=category, exact=True).click()
+        btn = self.page.get_by_role("button", name=category, exact=True)
+        expect(btn).to_be_visible()
+        btn.scroll_into_view_if_needed()
+        btn.click()
         return self
 
     @allure.step("Verify filtered vehicle card count is {expected}")

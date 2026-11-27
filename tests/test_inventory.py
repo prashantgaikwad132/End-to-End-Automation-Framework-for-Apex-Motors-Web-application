@@ -29,9 +29,8 @@ class TestInventory:
     def test_search_filters_vehicles(self, query, expected_count):
         """TC-010: Search filters vehicles by name/brand."""
         self.inventory.search(query)
-        count = self.inventory.get_card_count()
-        assert count == expected_count, f"Search '{query}': expected {expected_count}, got {count}"
-
+        self.inventory.assert_card_count(expected_count)
+    
     @allure.story("Search")
     @pytest.mark.inventory
     def test_search_no_results_message(self):
@@ -100,6 +99,6 @@ class TestInventory:
         """TC-018: Search + category filter work together."""
         self.inventory.filter_by_category("Sports")
         self.inventory.search("Viper")
-        assert self.inventory.get_card_count() == 1
+        self.inventory.assert_card_count(1)
         titles = self.inventory.get_card_titles()
         assert "Viper Evo" in titles
