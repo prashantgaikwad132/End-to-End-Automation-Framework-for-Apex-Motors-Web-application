@@ -32,6 +32,7 @@ class TestInventory:
         self.inventory.assert_card_count(expected_count)
     
     @allure.story("Search")
+    @pytest.mark.smoke
     @pytest.mark.inventory
     def test_search_no_results_message(self):
         """TC-011: 'No vehicles match' shown for zero results."""
